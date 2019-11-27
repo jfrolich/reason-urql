@@ -4,8 +4,8 @@ open PokemonStyles;
 
 module GetPokemon = [%graphql
   {|
-  query pokemon($name: String!) {
-    pokemon(name: $name) {
+  query pokemon($name: String!, $id: String!) {
+    pokemon(name: $name, id: $id) {
       name
       classification
       height {
@@ -22,8 +22,8 @@ module GetPokemon = [%graphql
 
 [@react.component]
 let make = (~pokemon: string) => {
-  let request = GetPokemon.make(~name=pokemon, ());
-  let ({response}, _) = useQuery(~request, ());
+  let ({response}, _) =
+    useQuery(GetPokemon.definition, ~id="1", ~name=pokemon, ());
 
   switch (response) {
   | Data(data) =>
